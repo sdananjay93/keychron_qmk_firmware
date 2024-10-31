@@ -2,9 +2,6 @@
 
 ## Source Directory - keyboards/keychron/v1_max/
 
-### **board.h**
-Defines the board
-
 ### config.h
 * .h files are header files used to define the function headers.
 * .c files are where the function body is defined. 
