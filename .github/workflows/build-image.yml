@@ -44,7 +44,7 @@ jobs:
       # Compile the firmware for your specific keyboard and keymap
       - name: Build firmware
         run: |
-          qmk compile -kb keychron/v1_max -km MyV1Max
+          qmk compile -kb keychron/v1_max/ansi_encoder -km MyV1Max
 
       # Save the compiled firmware as an artifact for download
       - name: Upload firmware
