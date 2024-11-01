@@ -45,6 +45,8 @@ jobs:
       - name: Build firmware
         run: |
           qmk compile -kb keychron/v1_max/ansi_encoder -km MyV1Max
+          pwd
+          ls -la
 
       # Save the compiled firmware as an artifact for download
       - name: Upload firmware
@@ -54,4 +56,5 @@ jobs:
           path: $GITHUB_WORKSPACE/.build/keychron_v1_max_ansi_encoder_MyV1Max.bin
           compression-level: 0
           overwrite: true
+          if-no-files-found: error
 
