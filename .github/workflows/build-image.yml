@@ -1,0 +1,55 @@
+name: Build QMK Firmware
+
+# Run this workflow on pushes to any branch and pull requests
+on:
+  workflow_dispatch:
+    inputs:
+      custom_message:
+        description: "Enter description for this run"
+        required: True
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: 'wireless_playground'
+
+      # Print which commit ID
+      - name: Show latest commit ID
+        run: |
+          echo "Latest Commit ID - $GITHUB_SHA"
+          echo "Custom Message - ${{ github.event.inputs.custom_message }}"
+
+      # Install dependencies
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install QMK CLI
+        run: |
+          pip install qmk
+
+      # Set up QMK firmware and dependencies
+      - name: Set up QMK Firmware
+        run: |
+          qmk setup -y
+          qmk doctor
+
+      # Compile the firmware for your specific keyboard and keymap
+      - name: Build firmware
+        run: |
+          qmk compile -kb keychron/v1_max -km MyV1Max
+
+      # Save the compiled firmware as an artifact for download
+      - name: Upload firmware
+        uses: actions/upload-artifact@v2
+        with:
+          name: firmware
+          path: qmk_firmware/.build/keychron_v1_max_ansi_encoder_MyV1Max.bin
+
