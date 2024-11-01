@@ -51,7 +51,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: keychron_v1_max_ansi_encoder_MyV1Max.bin
-          path: keychron_qmk_firmware/.build/keychron_v1_max_ansi_encoder_MyV1Max.bin
+          path: $GITHUB_WORKSPACE/.build/keychron_v1_max_ansi_encoder_MyV1Max.bin
           compression-level: 0
           overwrite: true
 
