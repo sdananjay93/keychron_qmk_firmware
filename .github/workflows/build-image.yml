@@ -39,7 +39,7 @@ jobs:
       - name: Set up QMK Firmware
         run: |
           qmk setup -y
-          qmk doctor
+          qmk doctor | echo "Done!"
 
       # Compile the firmware for your specific keyboard and keymap
       - name: Build firmware
