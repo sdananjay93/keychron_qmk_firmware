@@ -70,13 +70,12 @@
 * [Swap Hands](https://docs.qmk.fm/features/swap_hands)
 
 
+## Firmware Sizes
 
-
-
-
-## Other Files - keyboards/keychron/
-
-### common/wiresless/wireless.mk
-
-
-### common/keychron_common.mk
+| Version | Size | Description | 
+|-|-|-|
+| Base | 92K | No Changes from Base |
+| Added Console Enable | 92K | |
+| Added features I needed | 93K | |
+| Lighting | 93K | Defined in config.h, but left info.json as is |
+| Lighting | 90K | Defined in config.h, disabled in info.|
