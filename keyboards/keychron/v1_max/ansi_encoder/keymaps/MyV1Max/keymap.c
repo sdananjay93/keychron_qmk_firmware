@@ -132,89 +132,124 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 #endif // ENCODER_MAP_ENABLE
 
 // Defining Key Combos
-enum combos {
-    COMBO_LAYER1,
-    COMBO_LAYER2,
-    COMBO_LAYER3,
-    COMBO_LAYER4,
-    COMBO_LAYER5,
-    SAMPLE_COMBO
-};
+// enum combos {
+//     COMBO_LAYER1,
+//     COMBO_LAYER2,
+//     COMBO_LAYER3,
+//     COMBO_LAYER4,
+//     COMBO_LAYER5,
+//     SAMPLE_COMBO
+// };
 
-const uint16_t PROGMEM combo_layer1[] = {KC_LCTL, KC_L, KC_1, COMBO_END};
-const uint16_t PROGMEM combo_layer2[] = {KC_LCTL, KC_L, KC_2, COMBO_END};
-const uint16_t PROGMEM combo_layer3[] = {KC_LCTL, KC_L, KC_3, COMBO_END};
-const uint16_t PROGMEM combo_layer4[] = {KC_LCTL, KC_L, KC_4, COMBO_END};
-const uint16_t PROGMEM combo_layer5[] = {KC_LCTL, KC_L, KC_5, COMBO_END};
-const uint16_t PROGMEM sample_combo[] = {KC_A, KC_S, COMBO_END};
+// const uint16_t PROGMEM combo_layer1[] = {KC_LCTL, KC_L, KC_1, COMBO_END};
+// const uint16_t PROGMEM combo_layer2[] = {KC_LCTL, KC_L, KC_2, COMBO_END};
+// const uint16_t PROGMEM combo_layer3[] = {KC_LCTL, KC_L, KC_3, COMBO_END};
+// const uint16_t PROGMEM combo_layer4[] = {KC_LCTL, KC_L, KC_4, COMBO_END};
+// const uint16_t PROGMEM combo_layer5[] = {KC_LCTL, KC_L, KC_5, COMBO_END};
+// const uint16_t PROGMEM sample_combo[] = {KC_A, KC_S, COMBO_END};
 
-combo_t key_combos[] = {
-    [COMBO_LAYER1] = COMBO_ACTION(combo_layer1),
-    [COMBO_LAYER2] = COMBO_ACTION(combo_layer2),
-    [COMBO_LAYER3] = COMBO_ACTION(combo_layer3),
-    [COMBO_LAYER4] = COMBO_ACTION(combo_layer4),
-    [COMBO_LAYER5] = COMBO_ACTION(combo_layer5),
-    [SAMPLE_COMBO] = COMBO_ACTION(sample_combo),
-};
+// combo_t key_combos[] = {
+//     [COMBO_LAYER1] = COMBO_ACTION(combo_layer1),
+//     [COMBO_LAYER2] = COMBO_ACTION(combo_layer2),
+//     [COMBO_LAYER3] = COMBO_ACTION(combo_layer3),
+//     [COMBO_LAYER4] = COMBO_ACTION(combo_layer4),
+//     [COMBO_LAYER5] = COMBO_ACTION(combo_layer5),
+//     [SAMPLE_COMBO] = COMBO_ACTION(sample_combo),
+// };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (!process_record_keychron_common(keycode, record)) {
         return false;
     }
     return true;
+
+    // Adding My Custom Handling
+    switch (keycode) {
+        case KC_LCTL:
+            if (record->event.pressed && record->tap.count) {
+                tap_code16(QK_LEAD);
+                return false;
+            }
+            break;
+    }
+    return true;
 }
 
-// PRocessing for Combo Events
-void process_combo_event(uint16_t combo_index, bool pressed) {
-    switch (combo_index) {
-        case COMBO_LAYER1:
-            if (pressed) {
-                layer_move(LAYER1);
-            }
-            break;
-        case COMBO_LAYER2:
-            if (pressed) {
-                layer_move(LAYER2);
-            }
-            break;
-        case COMBO_LAYER3:
-            if (pressed) {
-                layer_move(LAYER3);
-            }
-            break;
-        case COMBO_LAYER4:
-            if (pressed) {
-                layer_move(LAYER4);
-            }
-            break;
-        case COMBO_LAYER5:
-            if (pressed) {
-                layer_move(LAYER5);
-            }
-            break;
+// Processing for Combo Events
+// void process_combo_event(uint16_t combo_index, bool pressed) {
+//     switch (combo_index) {
+//         case COMBO_LAYER1:
+//             if (pressed) {
+//                 layer_move(LAYER1);
+//             }
+//             break;
+//         case COMBO_LAYER2:
+//             if (pressed) {
+//                 layer_move(LAYER2);
+//             }
+//             break;
+//         case COMBO_LAYER3:
+//             if (pressed) {
+//                 layer_move(LAYER3);
+//             }
+//             break;
+//         case COMBO_LAYER4:
+//             if (pressed) {
+//                 layer_move(LAYER4);
+//             }
+//             break;
+//         case COMBO_LAYER5:
+//             if (pressed) {
+//                 layer_move(LAYER5);
+//             }
+//             break;
+//     }
+// }
+
+// Leader Key processing for layer changes
+void leader_start_user(void) {
+    // Do Something when Leader starts
+}
+
+void leader_end_user(void) {
+    if (leader_sequence_one_key(KC_K)) {
+        SEND_STRING("Leader Keys are working");
+    } else if (leader_sequence_one_key(KC_M)) {
+        SEND_STRING("Yes They are working");
+    } else if (leader_sequence_one_key(KC_L, KC_1)) {
+        layer_invert(LAYER1);
+    } else if (leader_sequence_one_key(KC_L, KC_2)) {
+        layer_invert(LAYER2);
+    } else if (leader_sequence_one_key(KC_L, KC_3)) {
+        layer_invert(LAYER3);
+    } else if (leader_sequence_one_key(KC_L, KC_4)) {
+        layer_invert(LAYER4);
+    } else if (leader_sequence_one_key(KC_L, KC_5)) {
+        layer_invert(LAYER5);
     }
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
         case UNIX_BASE:
-            rgblight_sethsv_noeeprom(HSV_RED);
+            rgblight_sethsv(HSV_RED);
             break;
         case LAYER1:
-            rgblight_sethsv_noeeprom(HSV_BLUE);
+            rgblight_sethsv(HSV_BLUE);
             break;
         case LAYER2:
-            rgblight_sethsv_noeeprom(HSV_GREEN);
+            rgblight_sethsv(HSV_GREEN);
             break;
         case LAYER3:
-            rgblight_sethsv_noeeprom(HSV_PURPLE);
+            rgblight_sethsv(HSV_PURPLE);
             break;
         case LAYER4:
-            rgblight_sethsv_noeeprom(HSV_OFF);
+            rgblight_sethsv(HSV_OFF);
             break;
         case LAYER5:
-            rgblight_sethsv_noeeprom(HSV_GOLDENROD);
+            rgblight_sethsv(HSV_GOLDENROD);
             break;
     }
     return state;
 }
+
