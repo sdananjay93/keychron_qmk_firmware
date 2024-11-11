@@ -16,6 +16,7 @@
 
 #include QMK_KEYBOARD_H
 #include "keychron_common.h"
+#include "print.h"
 
 enum layers {
     UNIX_BASE,
@@ -44,6 +45,12 @@ enum layers {
 // │ CTR │ OPT  │ CMD  │               SPACE                    │ CMD  │  FN  │ CTRL │ LFT  │  DN  │ RGHT │
 // └─────┴──────┴──────┴────────────────────────────────────────┴──────┴──────┴──────┴──────┴──────┴──────┘
 
+enum custom_keycodes {
+    KC_M_U = SAFE_RANGE,
+    KC_M_D,
+    KC_M_L,
+    KC_M_R,
+};
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -51,7 +58,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_ESC,   KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,    KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,       KC_F12,   KC_DEL,             KC_MUTE,
         KC_GRV,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,     KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,      KC_EQL,   KC_BSPC,            KC_PGUP,
         KC_TAB,   KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,      KC_RBRC,  KC_BSLS,            KC_PGDN,
-        KC_CAPS,  KC_A,     KC_S,     KC_D,     KC_F,     KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,      KC_ENT,                       DB_TOGG,
+        QK_LEAD,  KC_A,     KC_S,     KC_D,     KC_F,     KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,      KC_ENT,                       DB_TOGG,
         KC_LSFT,            KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,      KC_RSFT,             KC_UP,
         KC_LCTL,  KC_LGUI, KC_LALT,                               KC_SPC,                                   KC_RALT,  MO(FN_LAYER),  KC_RCTL,  KC_LEFT,  KC_DOWN,  KC_RGHT
         ),
@@ -73,16 +80,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_LSFT,            KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,      KC_RSFT,             KC_UP,
         KC_LCTL,  KC_LOPTN, KC_LCMMD,                                KC_SPC,                                 KC_RCMMD, MO(FN_LAYER),   KC_RCTL,  KC_LEFT,  KC_DOWN,  KC_RGHT
         ),
-
+    // Movement Layer
     [LAYER1] = LAYOUT_ansi_82(
         _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,
         _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,
         _______,  BAT_LVL,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,
         _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,            _______,
-        _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,  _______,
-        _______,  _______,  _______,                                _______,                                _______,  _______,  _______,  _______,  _______,  _______
+        _______,            _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,  KC_M_D,
+        _______,  _______,  _______,                                _______,                                _______,  _______,  _______,  KC_M_R,  KC_M_U,  KC_M_L
         ),
-
+    //  Experimentation Layer
     [LAYER2] = LAYOUT_ansi_82(
         _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,
         _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,            _______,
@@ -131,31 +138,11 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 };
 #endif // ENCODER_MAP_ENABLE
 
-// Defining Key Combos
-enum combos {
-    COMBO_LAYER1,
-    COMBO_LAYER2,
-    COMBO_LAYER3,
-    COMBO_LAYER4,
-    COMBO_LAYER5,
-    SAMPLE_COMBO
-};
-
-const uint16_t PROGMEM combo_layer1[] = {KC_LCTL, KC_L, KC_1, COMBO_END};
-const uint16_t PROGMEM combo_layer2[] = {KC_LCTL, KC_L, KC_2, COMBO_END};
-const uint16_t PROGMEM combo_layer3[] = {KC_LCTL, KC_L, KC_3, COMBO_END};
-const uint16_t PROGMEM combo_layer4[] = {KC_LCTL, KC_L, KC_4, COMBO_END};
-const uint16_t PROGMEM combo_layer5[] = {KC_LCTL, KC_L, KC_5, COMBO_END};
-const uint16_t PROGMEM sample_combo[] = {KC_A, KC_S, COMBO_END};
-
-combo_t key_combos[] = {
-    [COMBO_LAYER1] = COMBO_ACTION(combo_layer1),
-    [COMBO_LAYER2] = COMBO_ACTION(combo_layer2),
-    [COMBO_LAYER3] = COMBO_ACTION(combo_layer3),
-    [COMBO_LAYER4] = COMBO_ACTION(combo_layer4),
-    [COMBO_LAYER5] = COMBO_ACTION(combo_layer5),
-    [SAMPLE_COMBO] = COMBO_ACTION(sample_combo),
-};
+// Leader Key processing for layer changes
+void leader_start_user(void) {
+    // Do Something when Leader starts
+    dprintf("Leader Key Started\n");
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     if (!process_record_keychron_common(keycode, record)) {
@@ -164,57 +151,42 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-// PRocessing for Combo Events
-void process_combo_event(uint16_t combo_index, bool pressed) {
-    switch (combo_index) {
-        case COMBO_LAYER1:
-            if (pressed) {
-                layer_move(LAYER1);
-            }
-            break;
-        case COMBO_LAYER2:
-            if (pressed) {
-                layer_move(LAYER2);
-            }
-            break;
-        case COMBO_LAYER3:
-            if (pressed) {
-                layer_move(LAYER3);
-            }
-            break;
-        case COMBO_LAYER4:
-            if (pressed) {
-                layer_move(LAYER4);
-            }
-            break;
-        case COMBO_LAYER5:
-            if (pressed) {
-                layer_move(LAYER5);
-            }
-            break;
+
+void leader_end_user(void) {
+    if (leader_sequence_two_keys(KC_L, KC_1)) {
+        layer_invert(LAYER1);
+    } else if (leader_sequence_two_keys(KC_L, KC_2)) {
+        layer_invert(LAYER2);
+    } else if (leader_sequence_two_keys(KC_L, KC_3)) {
+        layer_invert(LAYER3);
+    } else if (leader_sequence_two_keys(KC_L, KC_4)) {
+        layer_invert(LAYER4);
+    } else if (leader_sequence_two_keys(KC_L, KC_5)) {
+        layer_invert(LAYER5);
     }
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
         case UNIX_BASE:
-            rgblight_sethsv_noeeprom(HSV_RED);
+            rgblight_sethsv(HSV_RED);
             break;
         case LAYER1:
-            rgblight_sethsv_noeeprom(HSV_BLUE);
+            rgblight_sethsv(HSV_BLUE);
             break;
         case LAYER2:
-            rgblight_sethsv_noeeprom(HSV_GREEN);
+            rgblight_sethsv(HSV_GREEN);
             break;
         case LAYER3:
-            rgblight_sethsv_noeeprom(HSV_PURPLE);
+            rgblight_sethsv(HSV_PURPLE);
             break;
         case LAYER4:
-            rgblight_sethsv_noeeprom(HSV_OFF);
+            rgblight_sethsv(HSV_OFF);
             break;
         case LAYER5:
-            rgblight_sethsv_noeeprom(HSV_GOLDENROD);
+            rgblight_sethsv(HSV_GOLDENROD);
             break;
     }
     return state;
 }
+

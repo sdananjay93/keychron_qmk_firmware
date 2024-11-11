@@ -9,3 +9,7 @@
 // Combos Related
 #define COMBO_TERM 1000
 #define COMBO_MUST_PRESS_IN_ORDER
+
+//  Leader Key related
+#define LEADER_TIMEOUT 500
+#define LEADER_PER_KEY_TIMING
