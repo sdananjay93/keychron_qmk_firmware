@@ -114,3 +114,5 @@ via*.json
 
 # Act Secrets
 .secrets
+
+.GitWorkflow
